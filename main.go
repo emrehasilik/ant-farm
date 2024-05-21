@@ -303,21 +303,26 @@ func filterPaths(paths [][]string, antCount int) [][]string {
 	return filteredPaths
 }
 
-//karıncaların belirli yolları takip ederek başlangıçtan bitişe nasıl hareket edeceğini simüle eder
 func simulateAntMovements(paths [][]string, antCount int, start, end string) []string {
-	//movements: Her turda yapılan tüm hareketleri tutan dilim.
+	// movements: Her turda yapılan tüm hareketleri tutan dilim.
 	var movements []string
-	//antPosition: Her karıncanın mevcut pozisyonunu tutan harita.
+	// antPosition: Her karıncanın mevcut pozisyonunu tutan harita.
 	antPosition := make(map[int]int)
-	//antInEndRoom: Her karıncanın bitiş odasına ulaşıp ulaşmadığını tutan harita.
+	// antInEndRoom: Her karıncanın bitiş odasına ulaşıp ulaşmadığını tutan harita.
 	antInEndRoom := make(map[int]bool)
-	//antPaths: Her karıncanın takip edeceği yolu tutan harita.
+	// antPaths: Her karıncanın takip edeceği yolu tutan harita.
 	antPaths := make(map[int][]string)
-	//activeAntCount: Halen hareket etmekte olan karıncaların sayısı.
+	// activeAntCount: Halen hareket etmekte olan karıncaların sayısı.
 	activeAntCount := antCount
 
+	// Her karınca için takip edeceği yolları belirle.
 	for i := 1; i <= antCount; i++ {
-		antPaths[i] = paths[(i-1)%len(paths)]
+		if i == antCount {
+			// Son karınca (antCount numaralı karınca) için yolların ilk yolunu tercih et.
+			antPaths[i] = paths[0]
+		} else {
+			antPaths[i] = paths[(i-1)%len(paths)]
+		}
 		antPosition[i] = 0
 		antInEndRoom[i] = false
 	}
@@ -325,12 +330,13 @@ func simulateAntMovements(paths [][]string, antCount int, start, end string) []s
 	turn := 0
 	for activeAntCount > 0 {
 		turn++
-		//turnMovements: Bu turda yapılan hareketleri tutan dilim.
+		// turnMovements: Bu turda yapılan hareketleri tutan dilim.
 		var turnMovements []string
-		//tunnelUsage: Bu turda kullanılan tünelleri tutan harita. Tünellerin aynı turda çift yönlü kullanımını engeller.
+		// tunnelUsage: Bu turda kullanılan tünelleri tutan harita. Tünellerin aynı turda çift yönlü kullanımını engeller.
 		tunnelUsage := make(map[string]bool)
-		//Her karınca için mevcut odası ve bir sonraki odası belirlenir.
-		//tunnel ve reverseTunnel değişkenleri, tünelin iki yönünü temsil eder.
+
+		// Her karınca için mevcut odası ve bir sonraki odası belirlenir.
+		// tunnel ve reverseTunnel değişkenleri, tünelin iki yönünü temsil eder.
 		for i := 1; i <= antCount; i++ {
 			if antInEndRoom[i] {
 				continue
@@ -353,7 +359,7 @@ func simulateAntMovements(paths [][]string, antCount int, start, end string) []s
 			}
 		}
 
-		//ller. Eğer hiçbir hareket yapılmazsa, bu, tüm karıncaların bitiş odasına ulaştığı veya ulaşamadığı anlamına gelir,
+		// Eğer hiçbir hareket yapılmazsa, bu, tüm karıncaların bitiş odasına ulaştığı veya ulaşamadığı anlamına gelir,
 		// bu nedenle simülasyon sona erdirilir. Bu sayede, gereksiz döngülemelerden kaçınılmış olur ve simülasyonun daha verimli olması sağlanır.
 		if len(turnMovements) > 0 {
 			movements = append(movements, strings.Join(turnMovements, " "))
