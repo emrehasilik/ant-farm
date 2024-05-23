@@ -14,8 +14,8 @@ This is a Go program to simulate the movement of ants in a farm. The program rea
 
 1. **Clone the repository:**
     ```bash
-    git clone https://github.com/yourusername/ant-farm-simulation.git
-    cd ant-farm-simulation
+    git clone https://github.com/emrehasilik/ant-farm.git
+    cd ant-farm
     ```
 
 2. **Build the project:**
@@ -70,7 +70,7 @@ B-C
 Running the simulation:
 
 ```bash
-./main example00.txt,example01.txt...example07.txt,badexample00.txt,badexapmle01.txt
+./main example03.txt
 
 Produces output similar to:
 
