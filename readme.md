@@ -85,6 +85,6 @@ Path 2: [A B C]
 Ant Movements:
 L1-B L2-B
 L1-C
-
+```
 License
 This project is licensed under the MIT License.
